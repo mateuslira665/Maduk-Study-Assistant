@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home.jsx";
 import Chat from "./pages/Chat.jsx";
-import flashcards from "./pages/Flashcards.jsx";
+import Flashcards from "./pages/Flashcards.jsx";
 import Quiz from "./pages/Quiz.jsx";
 import QuizResult from "./pages/QuizResult.jsx";
 import Recentes from "./pages/Recentes.jsx";
@@ -10,6 +10,7 @@ import Recentes from "./pages/Recentes.jsx";
 function App() {
   return (
     <Routes>
+
       <Route
         path="/"
         element={<Home />}
@@ -21,9 +22,10 @@ function App() {
       />
 
       <Route
-        path="/flashcard"
-        element={<flashcards />}
+        path="/flashcards"
+        element={<Flashcards />}
       />
+
       <Route
         path="/quiz"
         element={<Quiz />}
@@ -40,5 +42,7 @@ function App() {
       />
 
     </Routes>
-  )
+  );
 }
+
+export default App;
