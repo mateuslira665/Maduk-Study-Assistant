@@ -71,7 +71,7 @@ function Sidebar() {
                     <strong>MADUK</strong>
 
                     <span>
-                        Assistente de estudos
+                        © Feito por Ricardo Augusto e Mateus lopes
                     </span>
                 </div>
 

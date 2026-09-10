@@ -2,44 +2,42 @@ import { useEffect, useState } from "react";
 
 import Sidebar from "../components/Sidebar.jsx";
 import MobileHeader from "../components/MobileHeader.jsx";
-import api from "../services/api.js";
+
+// Mudamos a importação para puxar exatamente as funções que criamos
+import { getHistorico, deletarConversa } from "../services/api.js";
 
 function Recentes() {
-    const [conversas, setConversas] = useState([]);
-    const [carregando, setCarregando] = useState(true);
+  const [conversas, setConversas] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
-    async function carregarConversas() {
-        try {
-            const resposta = await api.get("/conversas");
-
-            setConversas(resposta.data);
-        } catch (erro) {
-            console.error(
-                "Erro ao carregar conversas:",
-                erro
-            );
-        } finally {
-            setCarregando(false);
-        }
+  async function carregarConversas() {
+    try {
+      // Usamos a função getHistorico() diretamente
+      const dados = await getHistorico();
+      
+      // O fetch já nos devolve o array direto
+      setConversas(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar conversas:", erro);
+    } finally {
+      setCarregando(false);
     }
+  }
 
-    async function apagarConversa(id) {
-        try {
-            await api.delete(`/conversas/${id}`);
-
-            setConversas((listaAtual) =>
-                listaAtual.filter(
-                    (conversa) =>
-                        conversa.id !== id
-                )
-            );
-        } catch (erro) {
-            console.error(
-                "Erro ao apagar conversa:",
-                erro
-            );
-        }
+  async function apagarConversa(id) {
+    try {
+      //Usamos a nova função que criamos no api.js
+      const sucesso = await deletarConversa(id);
+      
+      if (sucesso) {
+        setConversas((listaAtual) => 
+          listaAtual.filter((conversa) => conversa.id !== id)
+        );
+      }
+    } catch (erro) {
+        console.error("Erro ao apagar a conversa", erro);
     }
+  }
 
     useEffect(() => {
         carregarConversas();
