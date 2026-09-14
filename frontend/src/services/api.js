@@ -45,3 +45,33 @@ export const enviarParaIA = async (pergunta) => {
     return "Desculpe, ocorreu um erro ao processar sua dúvida.";
   }
 };
+
+export const gerarQuiz = async (tema) => {
+  try {
+    const resposta = await fetch(`${BASE_URL}/api/quiz`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tema }),
+    });
+    if (!resposta.ok) throw new Error("Erro ao gerar quiz");
+    return await resposta.json();
+  } catch (erro) {
+    console.error("Erro ao gerar quiz:", erro);
+    return null;
+  }
+};
+
+export const gerarFlashcards = async (tema) => {
+  try {
+    const resposta = await fetch(`${BASE_URL}/api/flashcards`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tema }),
+    });
+    if (!resposta.ok) throw new Error("Erro ao gerar flashcards");
+    return await resposta.json();
+  } catch (erro) {
+    console.error("Erro ao gerar flashcards:", erro);
+    return null;
+  }
+};

@@ -2,13 +2,19 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+require('dotenv').config();
+const quizRouter = require('./routes/quiz');
+const flashcardsRouter = require('./routes/flashcards');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Substitua pelo seu token real da OpenAI assim que adicionar os créditos
-const OPENAI_API_KEY = "SUA_CHAVE_DA_OPENAI_AQUI";
+app.use('/api/quiz', quizRouter);
+app.use('/api/flashcards', flashcardsRouter);
+
+// Chave da API do Groq
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 app.post('/api/chat', async (req, res) => {
     const { pergunta } = req.body;
@@ -18,14 +24,14 @@ app.post('/api/chat', async (req, res) => {
     }
 
     try {
-        const respostaOpenAI = await fetch("https://api.openai.com/v1/chat/completions", {
+        const respostaGroq = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENAI_API_KEY}`
+                "Authorization": `Bearer ${GROQ_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4o-mini",
+                model: "openai/gpt-oss-120b",
                 messages: [
                     { role: "system", content: "Você é o MADUK AI, um assistente de estudos prestativo." },
                     { role: "user", content: pergunta }
@@ -34,14 +40,14 @@ app.post('/api/chat', async (req, res) => {
             }),
         });
 
-        if (!respostaOpenAI.ok) {
-            const erroDetalhes = await respostaOpenAI.text();
-            console.error("Detalhes do erro da OpenAI:", erroDetalhes);
-            throw new Error("Erro na comunicação com a API da OpenAI");
+        if (!respostaGroq.ok) {
+            const erroDetalhes = await respostaGroq.text();
+            console.error("Detalhes do erro do Groq:", erroDetalhes);
+            throw new Error("Erro na comunicação com a API do Groq");
         }
 
-        const dadosOpenAI = await respostaOpenAI.json();
-        const textoGerado = dadosOpenAI.choices?.[0]?.message?.content || "Não foi possível gerar uma resposta.";
+        const dadosGroq = await respostaGroq.json();
+        const textoGerado = dadosGroq.choices?.[0]?.message?.content || "Não foi possível gerar uma resposta.";
 
         const dbPath = path.join(__dirname, 'db.json');
         const dbData = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
