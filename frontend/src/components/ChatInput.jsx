@@ -1,27 +1,31 @@
 import { useState } from "react";
 
-function ChatInput({ onSend }) {
-    const [texto, setTexto] = useState("");
+function ChatInput({ value, onChange, onSend }) {
+    const [textoInterno, setTextoInterno] = useState("");
     const [mostrarAnexos, setMostrarAnexos] = useState(false);
 
-    function enviarMensagem() {
-        if (!texto.trim()) {
-            return;
+    const controlado = value !== undefined;
+    const texto = controlado ? value : textoInterno;
+
+    function atualizarTexto(novoValor) {
+        if (controlado) {
+            onChange(novoValor);
+        } else {
+            setTextoInterno(novoValor);
         }
+    }
+
+    function enviarMensagem() {
+        if (!texto.trim()) return;
 
         onSend(texto);
-
-        setTexto("");
+        atualizarTexto("");
         setMostrarAnexos(false);
     }
 
     function verificarTecla(event) {
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
+        if (event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
-
             enviarMensagem();
         }
     }
@@ -31,43 +35,23 @@ function ChatInput({ onSend }) {
 
             {mostrarAnexos && (
                 <div className="attachment-menu">
-
                     <label className="attachment-option">
                         <i className="bi bi-file-earmark"></i>
-
                         <span>Arquivo</span>
-
-                        <input
-                            type="file"
-                            hidden
-                        />
+                        <input type="file" hidden />
                     </label>
 
                     <label className="attachment-option">
                         <i className="bi bi-image"></i>
-
                         <span>Fotos</span>
-
-                        <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                        />
+                        <input type="file" accept="image/*" hidden />
                     </label>
 
                     <label className="attachment-option">
                         <i className="bi bi-camera"></i>
-
                         <span>Câmera</span>
-
-                        <input
-                            type="file"
-                            accept="image/*"
-                            capture="environment"
-                            hidden
-                        />
+                        <input type="file" accept="image/*" capture="environment" hidden />
                     </label>
-
                 </div>
             )}
 
@@ -76,11 +60,7 @@ function ChatInput({ onSend }) {
                 <button
                     type="button"
                     className="attachment-button"
-                    onClick={() =>
-                        setMostrarAnexos(
-                            !mostrarAnexos
-                        )
-                    }
+                    onClick={() => setMostrarAnexos(!mostrarAnexos)}
                     aria-label="Adicionar anexo"
                 >
                     <i className="bi bi-plus-lg"></i>
@@ -91,14 +71,11 @@ function ChatInput({ onSend }) {
                     maxLength={3000}
                     rows="1"
                     placeholder="Descreva sua dúvida..."
-                    onChange={(event) =>
-                        setTexto(event.target.value)
-                    }
+                    onChange={(event) => atualizarTexto(event.target.value)}
                     onKeyDown={verificarTecla}
                 />
 
                 <div className="chat-input-actions">
-
                     <span className="character-counter">
                         {texto.length} / 3.000
                     </span>
@@ -112,7 +89,6 @@ function ChatInput({ onSend }) {
                     >
                         <i className="bi bi-arrow-up"></i>
                     </button>
-
                 </div>
 
             </div>

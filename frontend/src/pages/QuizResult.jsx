@@ -1,147 +1,45 @@
-import { useNavigate } from "react-router-dom";
-
-import Sidebar from "../components/Sidebar.jsx";
-import MobileHeader from "../components/MobileHeader.jsx";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function QuizResult() {
-    const navigate = useNavigate();
-    const resultado = resultadoSalvo
-        ? JSON.parse(resultadoSalvo)
-        : {
-            acertos: 0,
-            total: 3
-        };
+  const navigate = useNavigate();
 
-    const porcentagem = math.round(
-        (resultado.acertos / resultado.total) * 100
-    );
+  const resultadoSalvo = sessionStorage.getItem("resultadoQuiz");
+  const resultado = resultadoSalvo
+    ? JSON.parse(resultadoSalvo)
+    : { acertos: 0, total: 0 };
 
-    function refazQuiz() {
-        sessionStorage.removeItem("resultadoQuiz");
-        navigate("/quiz")
-    }
-    return (
-        <div className="app-layout">
+  const { acertos, total } = resultado;
 
-            <Sidebar />
+  const porcentagemAcerto = total > 0
+    ? Math.round((acertos / total) * 100)
+    : 0;
 
-            <div className="main-area">
+  const refazerQuiz = () => {
+    sessionStorage.removeItem("resultadoQuiz");
+    navigate("/quiz");
+  };
 
-                <MobileHeader />
+  return (
+    <div className="container mt-5 text-center">
+      <h2>Resultado do Quiz</h2>
 
-                <main className="result-page">
+      <div className="card my-4 p-4 shadow-sm">
+        <h4>Você acertou {acertos} de {total} perguntas!</h4>
+        <p className="fs-5 text-muted">Aproveitamento de {porcentagemAcerto}%</p>
+      </div>
 
-                    <section className="result-card">
+      <div className="d-flex justify-content-center gap-3">
+        <button className="btn btn-primary" onClick={refazerQuiz}>
+          Refazer Quiz
+        </button>
 
-                        <div className="result-icon">
-                            <i className="bi bi-trophy"></i>
-                        </div>
-
-                        <span className="page-badge">
-                            Mini-Quiz concluído
-                        </span>
-
-                        <h1>
-                            Resultado
-                        </h1>
-
-                        <p className="result-description">
-                            Veja como você se saiu no quiz.
-                        </p>
-
-                        <div className="score-circle">
-
-                            <strong>
-                                {porcentagem}%
-                            </strong>
-
-                            <span>
-                                de aproveitamento
-                            </span>
-
-                        </div>
-
-                        <div className="result-score">
-
-                            <strong>
-                                {resultado.acertos}/{resultado.total}
-                            </strong>
-
-                            <span>
-                                respostas corretas
-                            </span>
-
-                        </div>
-
-                        <div className="result-message">
-
-                            {porcentagem >= 80 && (
-                                <>
-                                    <i className="bi bi-stars"></i>
-
-                                    <span>
-                                        Excelente resultado!
-                                    </span>
-                                </>
-                            )}
-
-                            {porcentagem >= 50 &&
-                                porcentagem < 80 && (
-                                    <>
-                                        <i className="bi bi-lightbulb"></i>
-
-                                        <span>
-                                            Bom trabalho. Continue revisando!
-                                        </span>
-                                    </>
-                                )}
-
-                            {porcentagem < 50 && (
-                                <>
-                                    <i className="bi bi-book"></i>
-
-                                    <span>
-                                        Revise o conteúdo e tente novamente.
-                                    </span>
-                                </>
-                            )}
-
-                        </div>
-
-                        <div className="result-actions">
-
-                            <button
-                                type="button"
-                                className="result-primary-button"
-                                onClick={refazerQuiz}
-                            >
-                                <i className="bi bi-arrow-repeat"></i>
-
-                                Refazer quiz
-                            </button>
-
-                            <button
-                                type="button"
-                                className="result-secondary-button"
-                                onClick={voltarInicio}
-                            >
-                                <i className="bi bi-house"></i>
-
-                                Voltar ao início
-                            </button>
-
-                        </div>
-
-                    </section>
-
-                </main>
-
-            </div>
-
-        </div>
-    );
+        <button className="btn btn-outline-secondary" onClick={() => navigate("/")}>
+          Voltar ao início
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default QuizResult;
-
-
