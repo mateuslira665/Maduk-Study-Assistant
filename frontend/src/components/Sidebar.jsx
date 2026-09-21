@@ -1,14 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 function Sidebar() {
     const navigate = useNavigate();
 
     return (
         <aside className="sidebar d-none d-lg-flex">
-
             <div>
-
-                {/* LOGO */}
                 <div
                     className="sidebar-logo"
                     onClick={() => navigate("/")}
@@ -22,24 +20,23 @@ function Sidebar() {
                     </span>
                 </div>
 
-                {/* NOVA CONVERSA */}
                 <button
+                    type="button"
                     className="new-chat-button"
                     onClick={() => navigate("/")}
                 >
                     <i className="bi bi-plus-lg"></i>
-
                     Nova conversa
                 </button>
 
-                {/* NAVEGAÇÃO */}
                 <nav className="sidebar-nav">
-
                     <NavLink
                         to="/"
                         end
                         className={({ isActive }) =>
-                            isActive ? "sidebar-link active" : "sidebar-link"
+                            isActive
+                                ? "sidebar-link active"
+                                : "sidebar-link"
                         }
                     >
                         <i className="bi bi-house"></i>
@@ -49,34 +46,31 @@ function Sidebar() {
                     <NavLink
                         to="/recentes"
                         className={({ isActive }) =>
-                            isActive ? "sidebar-link active" : "sidebar-link"
+                            isActive
+                                ? "sidebar-link active"
+                                : "sidebar-link"
                         }
                     >
                         <i className="bi bi-clock-history"></i>
                         Recentes
                     </NavLink>
-
                 </nav>
-
             </div>
 
-            {/* USUÁRIO */}
-            <div className="sidebar-profile">
+            <div className="sidebar-footer">
+                <ThemeToggle />
 
-                <div className="profile-avatar">
-                    M
+                <div className="sidebar-profile">
+                    <div className="profile-avatar">
+                        M
+                    </div>
+
+                    <div className="profile-info">
+                        <strong>MADUK</strong>
+                        <span>Assistente de estudos</span>
+                    </div>
                 </div>
-
-                <div className="profile-info">
-                    <strong>MADUK</strong>
-
-                    <span>
-                        Assistente de estudos
-                    </span>
-                </div>
-
             </div>
-
         </aside>
     );
 }

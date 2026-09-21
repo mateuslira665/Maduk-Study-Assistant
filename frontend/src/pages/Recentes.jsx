@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Sidebar from "../components/Sidebar.jsx";
 import MobileHeader from "../components/MobileHeader.jsx";
+
 import api from "../services/api.js";
 
 function Recentes() {
@@ -10,12 +11,13 @@ function Recentes() {
 
     async function carregarConversas() {
         try {
-            const resposta = await api.get("/conversas");
+            const resposta =
+                await api.get("/historico");
 
             setConversas(resposta.data);
         } catch (erro) {
             console.error(
-                "Erro ao carregar conversas:",
+                "Erro ao carregar histórico:",
                 erro
             );
         } finally {
@@ -25,7 +27,9 @@ function Recentes() {
 
     async function apagarConversa(id) {
         try {
-            await api.delete(`/conversas/${id}`);
+            await api.delete(
+                `/historico/${id}`
+            );
 
             setConversas((listaAtual) =>
                 listaAtual.filter(
@@ -35,7 +39,7 @@ function Recentes() {
             );
         } catch (erro) {
             console.error(
-                "Erro ao apagar conversa:",
+                "Erro ao excluir conversa:",
                 erro
             );
         }
@@ -65,9 +69,7 @@ function Recentes() {
                                 Histórico
                             </span>
 
-                            <h1>
-                                Recentes
-                            </h1>
+                            <h1>Recentes</h1>
 
                             <p>
                                 Continue de onde parou.
@@ -83,6 +85,7 @@ function Recentes() {
 
                         {!carregando &&
                             conversas.length === 0 && (
+
                                 <div className="empty-state">
 
                                     <div className="empty-state-icon">
@@ -98,14 +101,17 @@ function Recentes() {
                                     </p>
 
                                 </div>
+
                             )}
 
                         {!carregando &&
                             conversas.length > 0 && (
+
                                 <div className="recentes-list">
 
                                     {conversas.map(
                                         (conversa) => (
+
                                             <article
                                                 key={conversa.id}
                                                 className="recent-conversation"
@@ -126,13 +132,8 @@ function Recentes() {
                                                     </p>
 
                                                     <span>
-                                                        {conversa.data
-                                                            ? new Date(
-                                                                conversa.data
-                                                            ).toLocaleDateString(
-                                                                "pt-BR"
-                                                            )
-                                                            : "Sem data"}
+                                                        {conversa.data ||
+                                                            "Sem data"}
                                                     </span>
 
                                                 </div>
@@ -151,10 +152,12 @@ function Recentes() {
                                                 </button>
 
                                             </article>
+
                                         )
                                     )}
 
                                 </div>
+
                             )}
 
                     </div>

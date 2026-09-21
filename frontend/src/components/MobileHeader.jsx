@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 
+import ThemeToggle from "./ThemeToggle.jsx";
+
 function MobileHeader() {
     return (
         <>
             <header className="mobile-header d-lg-none">
-
                 <button
-                    className="mobile-menu-button"
                     type="button"
+                    className="mobile-menu-button"
                     data-bs-toggle="offcanvas"
                     data-bs-target="#mobileMenu"
                     aria-controls="mobileMenu"
@@ -22,7 +23,6 @@ function MobileHeader() {
                 <div className="mobile-avatar">
                     M
                 </div>
-
             </header>
 
             <div
@@ -32,7 +32,6 @@ function MobileHeader() {
                 aria-labelledby="mobileMenuLabel"
             >
                 <div className="offcanvas-header">
-
                     <h5
                         className="offcanvas-title"
                         id="mobileMenuLabel"
@@ -46,11 +45,9 @@ function MobileHeader() {
                         data-bs-dismiss="offcanvas"
                         aria-label="Fechar"
                     ></button>
-
                 </div>
 
                 <div className="offcanvas-body">
-
                     <Link
                         to="/"
                         className="mobile-nav-link"
@@ -78,6 +75,9 @@ function MobileHeader() {
                         Recentes
                     </Link>
 
+                    <hr />
+
+                    <ThemeToggle />
                 </div>
             </div>
         </>
